@@ -1,0 +1,114 @@
+{% extends 'base_template.html'%}
+{% load static %}
+{% block title %} Détail sur l'article {% endblock %}
+
+{% block content %}
+<section class="container">
+    {% if article %}
+    <div class="article-details">
+        {% autoescape off %}
+        <div>
+            {% if user.id == article.author.id %}
+            <h2>
+                <a href="{% url 'update-article' article.slug %}"> Editer cet article</a>
+            </h2>
+            {% endif %}
+
+            <span class="date">Mis à jour le {{ article.updated_on|date:"D d M Y" }} à {{ article.updated_on|time:"H:i" }} GMT </span><br>
+
+            <h1>{{ article.title }}</h1><br>
+            <p class="author">
+                <a href="{% url 'user-profile' article.author.username %}">
+                    <img class="author-image" src="{{ article.author.photo.url }}"/> par  <i><b>{{ article.author.first_name }} {{ article.author.last_name }} </b> </i>
+                </a>
+            </p>
+            <br>
+            <br>
+            <img class="image" src="{{ article.photo.url }}" alt="image" />
+            <div>
+                {{ article.content }}
+            </div> <br>
+
+            <p class="author">
+                <a href="{% url 'user-profile' article.author.username %}">
+                    <img class="author-image" src="{{ article.author.photo.url }}"/>  <i><b>{{ article.author.first_name }} {{ article.author.last_name }} </b> </i>
+                </a>
+            </p>
+            <br>
+            <span class="date">
+                {{ article.pub_date|date:"D d M Y" }} à {{ article.pub_date|time:"H:i" }} GMT
+            </span><br><br>
+
+        </div>
+        <br>
+        <hr>
+
+        <div class="likes-comments-icons row">
+            <div class="likes p-1 col-3">
+                <div class="likes-count">
+                    {{ article.likes.count }}
+                </div>
+                <a href="{% url 'like-article' article.slug %}">
+                    <img src="{% static 'main/icons/thumb_up.svg' %}" />
+                </a>
+            </div>
+            <div class="comments-icon col-8">
+                <b>{% if comments %} {{ comments_number }} {% else %}0{% endif %} Commentaire(s)</b>
+            </div>
+        </div>
+        <br><br>
+        Laissez un commentaire
+
+        <!--- debut comment form -->
+        <form action="{% url 'comment' %}" method="POST">
+            {% csrf_token %}
+
+            <input name="article_slug" type="hidden" value="{{article.slug}}" />
+            <div class="w-100">
+                <textarea class="form-control" name="comment" cols="25" rows="5" required ></textarea> <br>
+                <button class="btn btn-primary" type="submit">Envoyer</button> <br>
+            </div>
+        </form>
+        <div>
+            <br>
+            <b>{% if comments %} {{ comments_number }} {% else %}0{% endif %} Commentaire(s)</b><br><br>
+            {% for comment in comments %}
+            <div class="comment-div">
+                <a href="{% url 'user-profile' comment.writer.username %}">
+                    <b><img class="user-image" src="{{ comment.writer.photo.url }}"/>
+                        <span class="comment-prenom">{{comment.writer.first_name}} {{ comment.writer.last_name }}</span>
+                    </b>
+                </a><br>
+                <div class="comment-content">
+                    <p>
+                        {{ comment.comment_content }}
+                    </p>
+                </div>
+                <span class="date">{{ comment.post_date|date:"D d M Y" }} à {{ comment.post_date|time:"H:i" }} GMT </span><br>
+
+                <a href="{% url 'reply' comment.id %}">
+                    <button class="reply-btn"> Répondre </button>
+                </a>
+                <button class="replies-btn">
+                    <a href="{% url 'comment-replies' comment.id %}"> {{ comment.replies.count }} réponse(s)</a>
+                </button>
+                <br>
+                {% if user.id == comment.writer.id %}
+                <a href="{% url 'delete-comment' comment.id %}">Supprimer</a>
+                {% endif%}
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+        <br>
+        {% endautoescape %}
+    </div>
+    {% endif %}
+    {% if not article %}
+    <a href="{% url 'articles' %}">Voir nos articles</a>
+    {% endif %}
+
+
+</section>
+
+{% endblock %}

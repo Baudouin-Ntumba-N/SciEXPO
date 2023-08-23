@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link
+              rel="stylesheet"
+              href="{% static 'main/bootstrap.min.css' %}" />
+
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+-->
+        <link
+              rel="stylesheet"
+              href="{% static 'main/main.css' %}"
+              type="text/css" />
+        <link
+              rel="stylesheet"
+              href="{% static 'articles/styles.css' %}"
+              type="text/css" />
+
+        <script src="{% static 'main/main.js' %}"></script>
+
+        <script src="{% static 'main/eye-on-Off.js' %}"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid">
+            <header class="header row">
+                <div class="current-user col-lg-2">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'user-profile' user.username %}"> <img
+                                                                           class="image" src="{{ user.photo.url }}" />
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="logo col-lg-2"><a href="{% url 'home' %}">SciEXPO</a></div>
+                <div class="menu col-lg-8">
+                    <nav class="navbar">
+                        <a href="{% url 'home' %}">
+                            <div>Accueil</div>
+                        </a>
+                        <a href="{% url 'articles'%}">
+                            <div>Articles</div>
+                        </a>
+                        <a href="{% url 'about' %}">
+                            <div> A propos </div>
+                        </a>
+
+                        {% if user.is_authenticated %}
+                         <a href="{% url 'settings' %}">
+                            <div class="settings">Paramètres</div>
+                        </a>
+                        <a href="{% url 'logout' %}">
+                            <div class="login">Se déconnecter</div>
+                        </a>
+
+                        {% else %}
+                        <a href="{% url 'signup' %}">
+                            <div class="signup">S'inscrire</div>
+                        </a>
+
+                        <a href="{% url 'login' %}">
+                            <div class="login">Se connecter</div>
+                        </a>
+
+                        {% endif %}
+                    </nav>
+                </div>
+                <div class="menu-button-container">
+                    <button class="btn" id="menu-button">Menu</button>
+                </div>
+            </header>
+            <div class="decor-bar"></div>
+
+            <div class="row">
+                {% block content %} {% endblock %}
+
+            </div>
+            {% block aside %} {% endblock %}
+            <footer class="row">
+                <div class="w-100 container">
+                  <br>
+                    <p>
+                        Conditions d'utilisations
+                    </p>
+                    copyright © SciEXPO <span id="current-year"></span>
+                </div>
+            </footer>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function(){
+
+                let date = new Date();
+
+                document.querySelector("#current-year").innerHTML = date.getFullYear();
+
+            });
+        </script>
+
+    </body>
+</html>

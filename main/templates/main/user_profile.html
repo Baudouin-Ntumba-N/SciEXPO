@@ -1,0 +1,54 @@
+{% extends 'base_template.html' %}
+
+{% block title %} {{ first_name }} {{ last_name }} {% endblock %}
+
+
+{% block content %}
+<div class="user-profile p-2">
+    <div class="profile-div p-1">
+        <div>
+          <a href="{% url 'user-photo-full' username %}">
+           <div class="cover-image w-100 pt-4 pl-1 pb-1" style="background: url({{cover_image}})">
+            <a href="{% url 'user-photo-full' username %}"> <img class="profile-photo" src="{{ photo }}" /> </a><br>
+
+           </div>
+          </a>
+            <h4>{{ first_name }} {{ last_name }}</h4>
+            <span><i>{{ statut }} chez </i><b>{{ ecole }} </b></span>
+        </div>
+        <div>
+            <b><i></i></b>
+            {% if about %}
+            <div class="">
+                {{ about }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <hr class="100%">
+    <h4>
+        Ses récents articles
+    </h4>
+    <div class="">
+        <div class="articles">
+            {% if articles %}
+            {% for article in articles %}
+            <div class="article p-2">
+                <a href="{% url 'article-details' article.slug %}" >
+                    <div>
+                        <img class="w-100" src="{{ article.photo.url }}" />
+                    </div>
+                    <span class="categorie">{{chaquearticle.categorie}}</span><br>
+                    <b>{{article.title}}</b>
+                    <br>
+                    {{ article.excerpt|truncatewords:20 }}
+                </a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

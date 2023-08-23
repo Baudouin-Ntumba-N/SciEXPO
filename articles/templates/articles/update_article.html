@@ -1,0 +1,91 @@
+{% extends 'base_template.html'%}
+
+{% block title %} Edition / Mise à jour {% endblock %}
+
+{% block content %}
+     <section class="container">
+
+        <div class="article-update w-100">
+
+            <form enctype="multipart/form-data" method="POST">
+
+                {% csrf_token %}
+
+             {% if form %}
+
+              {{ form.media }}
+
+                <div>
+                    Titre
+                </div>
+
+                <div>
+                    {{form.title}}
+                </div>
+                <br>
+
+                <div>
+                    Résumé:
+                </div>
+
+                <div>
+                    {{form.excerpt}}
+                </div>
+                <br>
+
+
+                <div>
+                    Catégorie:
+                </div>
+                <div>
+                    {{form.categorie}}
+                </div>
+
+                <br/>
+
+                <br/>
+
+                <div>
+                   body:
+                </div>
+
+                <div>
+                    {{form.content}}
+                </div>
+                 <br>
+
+              <div>
+                Ajouter une image:<br>
+                {{ form.photo }}
+              </div>
+              <br>
+
+                 <div>
+
+               Publié: {{ form.published }}
+
+                 </div>
+
+                <br>
+
+
+             <br/> <button class="btn btn-primary" type="submit"> Envoyer </button>
+
+              {%  endif %}
+            </form>
+
+
+        </div>
+     <div>
+         <br>
+         <button class="btn btn-danger">
+           {% if user.id == article.author.id %}
+                <a href="{% url 'delete-article' article.slug %}">Supprimer cet article</a>
+                {% endif%}
+         </button>
+         </div>
+
+
+</section>
+
+{% endblock %}

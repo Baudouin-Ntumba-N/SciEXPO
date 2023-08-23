@@ -1,0 +1,47 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Inscription{% endblock %}
+
+
+{% block content %}
+<div class="container">
+
+<div class="signup-div col-12 container">
+    <h3>
+      Créez votre compte maintenant
+    </h3>
+    <span class="text-danger">{{error}}</span>
+    <fieldset>
+      <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+
+        <div>
+            <br>
+            <label>{{ field.label }}</label>
+        </div>
+         {% if field.name == 'password' %}
+         <div class="password-div">
+             {{field}}
+             <a class="eye" href="#!">
+             <img class="eye-image" src="/media/icons/visibility.png" />
+             </a>
+          </div>
+          {% else %}
+          <div> {{field}}</div>
+          {% endif %}
+        {% endfor %}
+        <br>
+        <div class="container">
+
+            <button class="btn btn-primary w-50" type="submit">S'inscrire</button>
+        </div>
+
+      </form>
+    </fieldset>
+
+</div>
+
+</div>
+
+{% endblock %}

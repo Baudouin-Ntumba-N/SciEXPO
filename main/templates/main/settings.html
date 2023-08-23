@@ -1,0 +1,69 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Paramètres{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="settings-div col-12 container">
+
+        {% if messages %}
+        {% for message in messages %}
+        <h4 class="text-success">
+            {{ message }}
+        </h4>
+        {% endfor %}
+        {% endif %}
+
+        <fieldset>
+            <form enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                Nom d'utilisateur: {{ user.username }}
+                {% for field in form %}
+
+
+
+                <br>
+                {% if field.label == 'Photo' %}
+                <div>
+                    Photo de profil: <br>
+                    <img src="{{user.photo.url}}" id="user-photo" class="user-image" />
+                   <label class="photo-label">
+                       <input class="w-25" type="file" accept="image/*" name="photo" id="id_photo" />
+                       <span>Choisir une image</span>
+                   </label>
+                   </div>
+                {% elif field.label == 'Image de couverture' %}
+                <div>
+                    Photo de couverture:<br>
+                    <img src="{{user.cover_image.url}}" id="user-cover-image" class="user-image" />
+                  <label class="cover-image-label">
+                      <input class="w-25"  type="file" accept="image/*" name="cover_image" id="id_cover_image" />
+                  <span>Choisir une image</span>
+                    </label>
+                  </div>
+
+                {% else %}
+                <div>
+                    <label>{{ field.label }}</label>
+                </div>
+
+                <div>{{field}}</div>
+                {% endif %}
+
+                {% endfor %}
+                <br>
+                <div class="container">
+                    <button class="btn btn-primary w-50" type="submit">Enregistrer</button>
+                </div>
+
+            </form>
+        </fieldset>
+        <hr>
+        <div class="p-4 m-2">
+            <a href="{% url 'password-change' %}"><b>Changer le mot de passe</b></a>
+        </div>
+    </div>
+    <br>
+</div>
+{% endblock %}

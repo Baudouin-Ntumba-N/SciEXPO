@@ -1,0 +1,51 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <div class="login-div container col-12">
+        <h4 class="text-success">
+            {{msg}}
+        </h4>
+        <h3>
+            Connectez-vous
+        </h3>
+        <span class="text-danger">{{error}}</span>
+        <fieldset>
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+
+                {% if form %}
+                <div>
+                    {{form.username.label}}
+                </div>
+                <div class="username-div">
+                    {{form.username}}
+                </div>
+                <br>
+                <div>
+                    {{ form.password.label}}
+                </div>
+                <div class="password-div">
+                    {{ form.password}}
+
+                        <a class="eye" href="#!">
+                         <img class="eye-image" src="/media/icons/visibility.png" />
+                        </a>
+
+                </div><br>
+
+                {% endif %}
+                <br>
+                <div>
+                    <input class="btn btn-primary" type="submit" value="Se connecter" />
+                </div>
+            </form>
+        </fieldset> <br>
+        <span>Besoin d'un compte? <a href="{% url 'signup' %}"><b>Inscrivez-vous</b></a></span>
+        <br>
+    </div>
+</div>
+{% endblock %}

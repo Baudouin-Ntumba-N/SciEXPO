@@ -1,0 +1,63 @@
+{% extends 'base_template.html'%}
+
+{% block title %} Page d'articles {% endblock %}
+
+{% block content %}
+<section class="container">
+    {% if user.is_authenticated %}
+    <h4>
+        <a href="{% url 'create-article' %}">Créer un article</a>
+    </h4>
+    {% endif %}
+
+    {% if page %}
+    <div class="articles p-4 row">
+        {% for article in page %}
+        {% autoescape off %}
+        <div class="article w-100 p-2">
+            <a href="{% url 'article-details' article.slug %}">
+                <div class="image">
+                    <img src="{{article.photo.url }}" alt="photo" />
+                </div>
+                <span class="categorie">{{article.categorie}}</span><br>
+                <b>{{article.title}}</b><br>
+                {{ article.excerpt|truncatewords:15 }}
+            </a>
+        </div>
+        {% endautoescape %}
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+    <div class="pagination">
+
+        <div class="pagin-cover">
+            <center>
+                {% if page.has_previous %}
+                <div>
+                    <button class="btn btn-secondary"><a
+                            href="{% url 'articles' %}?page={{ page.previous_page_number }}">Précédent</a></button>
+                </div>
+                {% endif %}
+
+                {% if page.has_next %}
+                <div>
+                    <button class="btn btn-secondary"><a
+                            href="{% url 'articles' %}?page={{ page.next_page_number }}">Suivant</a></button>
+                </div>
+
+                {% endif %}
+
+            </center>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block aside %}
+
+<aside class="aside"> À voir aussi... </aside>
+
+{% endblock %}

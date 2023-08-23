@@ -1,0 +1,132 @@
+{% extends 'base_template.html'%}
+
+{% block title %} Réponses {% endblock %}
+
+{% block content %}
+
+<section class="container">
+
+    <div class="replies-div">
+        {% if authen %}
+        <b>{{authen}}</b>
+        {% endif %}
+        <div class="comment-div">
+            <a href="{% url 'user-profile' comment.writer.username %}">
+
+            <b>
+              <img class="user-image" src="{{comment.writer.photo.url }}" />
+              <span>{{comment.writer.first_name}} {{comment.writer.last_name}}
+              </span>
+            </b>
+            </a>
+            <br>
+            {{comment.comment_content}}
+        </div>
+
+        <b>Réponses</b><br><br>
+        {% if replies %}
+
+
+        {% for reply in replies %}
+
+        {%if reply.writer.id == comment.commented_article.author.id %}
+
+        <div class="reply">
+            <a href="{% url 'user-profile' reply.writer.username %}">
+            <b>
+                <img class="user-image" src="{{ reply.writer.photo.url }}" />
+                <span class="replier-first_name"	>{{reply.writer.first_name}}
+                 <span> Auteur</span></span>
+            </b>
+            </a>
+            <br>
+            {% autoescape off %}
+
+            <p>
+               {{reply.comment_content}}
+            </p>
+            <br>
+            <span class="date">{{reply.post_date}} GMT</span>
+
+            {% endautoescape %}
+
+
+            {% if user.id == reply.writer.id  %}
+            <a href="{% url 'delete-reply' reply.id %}">Supprimer</a>
+            {% endif %}
+        </div>
+        {% else %}
+
+        <div class="reply">
+            <a href="{% url 'user-profile' reply.writer.username %}">
+            <b>
+                <img class="user-image" src="{{ reply.writer.photo.url }}"/>
+                <span class="replier-prenom">
+                    {{reply.writer.first_name}} {{reply.writer.last_name}}
+                </span>
+            </b>
+            </a>
+            <br><br>
+
+            {% autoescape off %}
+
+            {{reply.comment_content}}
+            <br> <span class="date">{{reply.post_date}} UTC </span>
+
+            {% endautoescape %}
+
+            {% if user.id == reply.writer.id %}
+            <br>
+            <a href="{% url 'delete-reply' reply.id %}">Supprimer</a>
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+
+        {% endfor %}
+
+
+       {% else %}
+
+        Aucune réponse!
+
+        {% endif %}
+
+
+        <!-- reply form -->
+
+        <div class="replyform">
+
+            <b>Répondre</b>
+
+
+            <form id="relyform" action="{% url 'replying' %}" method="POST">
+
+                {% csrf_token %}
+
+
+                <input type="hidden" name="comment_id" value="{{comment.id}}" />
+
+                <div>
+                    <textarea id="reply-textarea" cols="20" class="form-control" rows="4" name="reply_content" required ></textarea>
+
+                    <br>
+
+                    <button class="btn btn-primary" type="submit">Envoyer</button>
+
+                </div>
+
+            </form>
+
+
+        </div>
+
+
+
+    </div>
+
+</section>
+
+{% endblock %}

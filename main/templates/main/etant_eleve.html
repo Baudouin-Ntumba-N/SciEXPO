@@ -1,0 +1,57 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Inscription  élève{% endblock %}
+
+{% block content %}
+<div class="container">
+
+<div class="enroll-div container col-12">
+
+  <h3>
+    Terminer l'inscription
+  </h3>
+
+    <fieldset>
+      <form action="{% url 'etant-eleve' %}" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+ {% if form %}
+                <input type="hidden" name="eleve" value="{{eleve.id}}" />
+                <div>
+                    Classe de l'élève:
+                </div>
+
+                <div>
+                    {{form.classe_del_eleve}}
+                </div>
+                <br>
+
+                <div>
+                    Option:
+                </div>
+
+                <div>
+                    {{form.option}}
+                </div>
+                <br>
+
+
+                <div>
+                Nom du responsable
+          		</div>
+                <div>
+                    {{form.tuteur}}
+                </div>
+
+                <br>
+
+        <br>
+        <div>
+          <input class="btn btn-primary" type="submit" value="Terminer" />
+        </div>
+{% endif %}
+      </form>
+    </fieldset>
+
+</div>
+</div>
+{% endblock %}
